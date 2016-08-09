@@ -12,11 +12,11 @@ app.get('/', function (req, res) {
     var match = /(,|;)/;
     res.writeHead(200, {"Content-Type": "text/json"});
 
-    header.ip = req.connection.remoteAddress;
+    header.ip = req.ip;
     header.lang = JSON.stringify(req.headers["accept-language"]);
     header.lang = header.lang.substring(1, header.lang.search(match));
     header.os = parsed.os.toString();
-    
+
 	res.end(JSON.stringify(header));
 });
 
