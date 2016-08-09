@@ -3,16 +3,18 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var ua = require('ua-parser');
+var requestIp = require('request-ip');
 
 app.use(express.static(path.resolve(__dirname)));
+app.use(requestIp.mw())
 
 app.get('/', function (req, res) {
     var header = { "ip": null, "lang": null, "os": null};
     var parsed = ua.parse(req.headers['user-agent']);
     var match = /(,|;)/;
     res.writeHead(200, {"Content-Type": "text/json"});
-
-    header.ip = req.ip;
+    
+    header.ip = req.clientIp;
     header.lang = JSON.stringify(req.headers["accept-language"]);
     header.lang = header.lang.substring(1, header.lang.search(match));
     header.os = parsed.os.toString();
